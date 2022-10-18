@@ -1,0 +1,330 @@
+d = zoho.crm.getRecordById("Test_Modules",record);
+//info d;
+product = d.get("Invoices_test");
+info product;
+count = 0;
+templist = List();
+templist1 = List();
+templist2 = List();
+templist3 = List();
+templist4 = List();
+templist5 = List();
+templist6 = List();
+templist7 = List();
+templist8 = List();
+templist9 = List();
+templist10 = List();
+templist11 = List();
+templist12 = List();
+i = 0;
+// record = zoho.crm.getRecordById("Invoices", 85431000012060250);
+// info record;
+//invoice_list = List();
+for each  item in product
+{
+	// 	count = count + 1;
+	// 	templist = list();
+	// 	tempMap = Map();
+	// 	tempMap.put("Account_Name",d.get("Account_Name"));
+	// 	tempMap.put("Subject",d.get("Subject"));
+	// 	productmap = Map();
+	// 	productmap.put("name",item.get("Product").get("name"));
+	// 	productmap.put("id",item.get("Product").get("id"));
+	// 	paraMap = Map();
+	// 	paraMap.put("product",productmap);
+	// 	paraMap.put("quanity",item.get("quanity"));
+	// 	paraMap.put("list_price",item.get("prices"));
+	// 	amount = item.get("quanity") * item.get("prices");
+	// 	paraMap.put("net_total",amount);
+	// 	templist.add(paraMap);
+	//tempMap.put("Product_Details",templist);
+	//resp = zoho.crm.createRecord("Invoices",tempMap)
+	month = item.get("Months");
+	info month;
+	if(month == 'September')
+	{
+		tempMap1 = Map();
+		tempMap1.put("Account_Name",d.get("Account_Name"));
+		tempMap1.put("parent_record",d);
+		sub = d.get("Subject");
+		mon = month;
+		subjectname = sub + " " + mon;
+		tempMap1.put("Subject",subjectname);
+		productmap1 = Map();
+		productmap1.put("name",item.get("Product").get("name"));
+		productmap1.put("id",item.get("Product").get("id"));
+		paraMap1 = Map();
+		paraMap1.put("product",productmap1);
+		paraMap1.put("quantity",item.get("quanity"));
+		paraMap1.put("List_price",item.get("prices"));
+		amount = item.get("quanity") * item.get("prices");
+		paraMap1.put("net_total",amount);
+		templist1.add(paraMap1);
+		tempMap1.put("Product_Details",templist1);
+	}
+	else if(month == 'October')
+	{
+		tempMap2 = Map();
+		tempMap2.put("Account_Name",d.get("Account_Name"));
+		tempMap2.put("parent_record",d);
+		sub = d.get("Subject");
+		mon = month;
+		subjectname = sub + " " + mon;
+		tempMap2.put("Subject",subjectname);
+		productmap2 = Map();
+		productmap2.put("name",item.get("Product").get("name"));
+		productmap2.put("id",item.get("Product").get("id"));
+		paraMap2 = Map();
+		paraMap2.put("product",productmap2);
+		paraMap2.put("quantity",item.get("quanity"));
+		paraMap2.put("List_price",item.get("prices"));
+		amount = item.get("quanity") * item.get("prices");
+		paraMap2.put("net_total",amount);
+		templist2.add(paraMap2);
+		tempMap2.put("Product_Details",templist2);
+	}
+	else if(month == 'November')
+	{
+		tempMap3 = Map();
+		tempMap3.put("Account_Name",d.get("Account_Name"));
+		tempMap3.put("parent_record",d);
+		sub = d.get("Subject");
+		mon = month;
+		subjectname = sub + " " + mon;
+		tempMap3.put("Subject",subjectname);
+		productmap3 = Map();
+		productmap3.put("name",item.get("Product").get("name"));
+		productmap3.put("id",item.get("Product").get("id"));
+		paraMap3 = Map();
+		paraMap3.put("product",productmap3);
+		paraMap3.put("quantity",item.get("quanity"));
+		paraMap3.put("List_price",item.get("prices"));
+		amount = item.get("quanity") * item.get("prices");
+		paraMap3.put("net_total",amount);
+		templist3.add(paraMap3);
+		tempMap3.put("Product_Details",templist3);
+	}
+	else if(month == 'December')
+	{
+		tempMap4 = Map();
+		tempMap4.put("Account_Name",d.get("Account_Name"));
+		tempMap4.put("parent_record",d);
+		sub = d.get("Subject");
+		mon = month;
+		subjectname = sub + " " + mon;
+		tempMap4.put("Subject",subjectname);
+		productmap4 = Map();
+		productmap4.put("name",item.get("Product").get("name"));
+		productmap4.put("id",item.get("Product").get("id"));
+		paraMap4 = Map();
+		paraMap4.put("product",productmap4);
+		paraMap4.put("quantity",item.get("quanity"));
+		paraMap4.put("List_price",item.get("prices"));
+		amount = item.get("quanity") * item.get("prices");
+		paraMap4.put("net_total",amount);
+		templist4.add(paraMap4);
+		tempMap4.put("Product_Details",templist4);
+	}
+	else if(month == 'January')
+	{
+		tempMap5 = Map();
+		tempMap5.put("Account_Name",d.get("Account_Name"));
+		sub = d.get("Subject");
+		tempMap5.put("parent_record",d);
+		mon = month;
+		subjectname = sub + " " + mon;
+		tempMap5.put("Subject",subjectname);
+		productmap5 = Map();
+		productmap5.put("name",item.get("Product").get("name"));
+		productmap5.put("id",item.get("Product").get("id"));
+		paraMap5 = Map();
+		paraMap5.put("product",productmap5);
+		paraMap5.put("quantity",item.get("quanity"));
+		paraMap5.put("List_price",item.get("prices"));
+		amount = item.get("quanity") * item.get("prices");
+		paraMap5.put("net_total",amount);
+		templist5.add(paraMap5);
+		tempMap5.put("Product_Details",templist5);
+	}
+	else if(month == 'Febuary')
+	{
+		tempMap6 = Map();
+		tempMap6.put("Account_Name",d.get("Account_Name"));
+		tempMap6.put("parent_record",d);
+		sub = d.get("Subject");
+		mon = month;
+		subjectname = sub + " " + mon;
+		tempMap6.put("Subject",subjectname);
+		productmap6 = Map();
+		productmap6.put("name",item.get("Product").get("name"));
+		productmap6.put("id",item.get("Product").get("id"));
+		paraMap6 = Map();
+		paraMap6.put("product",productmap6);
+		paraMap6.put("quantity",item.get("quanity"));
+		paraMap6.put("List_price",item.get("prices"));
+		amount = item.get("quanity") * item.get("prices");
+		paraMap6.put("net_total",amount);
+		templist6.add(paraMap6);
+		tempMap6.put("Product_Details",templist6);
+	}
+	else if(month == 'March')
+	{
+		tempMap7 = Map();
+		tempMap7.put("Account_Name",d.get("Account_Name"));
+		tempMap7.put("parent_record",d);
+		sub = d.get("Subject");
+		mon = month;
+		subjectname = sub + " " + mon;
+		tempMap7.put("Subject",subjectname);
+		productmap7 = Map();
+		productmap7.put("name",item.get("Product").get("name"));
+		productmap7.put("id",item.get("Product").get("id"));
+		paraMap7 = Map();
+		paraMap7.put("product",productmap7);
+		paraMap7.put("quantity",item.get("quanity"));
+		paraMap7.put("List_price",item.get("prices"));
+		amount = item.get("quanity") * item.get("prices");
+		paraMap7.put("net_total",amount);
+		templist7.add(paraMap7);
+		tempMap7.put("Product_Details",templist7);
+	}
+	else if(month == 'April')
+	{
+		tempMap8 = Map();
+		tempMap8.put("Account_Name",d.get("Account_Name"));
+		tempMap8.put("parent_record",d);
+		sub = d.get("Subject");
+		mon = month;
+		subjectname = sub + " " + mon;
+		tempMap8.put("Subject",subjectname);
+		productmap8 = Map();
+		productmap8.put("name",item.get("Product").get("name"));
+		productmap8.put("id",item.get("Product").get("id"));
+		paraMap8 = Map();
+		paraMap8.put("product",productmap8);
+		paraMap8.put("quantity",item.get("quanity"));
+		paraMap8.put("List_price",item.get("prices"));
+		amount = item.get("quanity") * item.get("prices");
+		paraMap8.put("net_total",amount);
+		templist8.add(paraMap8);
+		tempMap8.put("Product_Details",templist8);
+	}
+	else if(month == 'May')
+	{
+		tempMap9 = Map();
+		tempMap9.put("Account_Name",d.get("Account_Name"));
+		tempMap9.put("parent_record",d);
+		sub = d.get("Subject");
+		mon = month;
+		subjectname = sub + " " + mon;
+		tempMap9.put("Subject",subjectname);
+		productmap9 = Map();
+		productmap9.put("name",item.get("Product").get("name"));
+		productmap9.put("id",item.get("Product").get("id"));
+		paraMap9 = Map();
+		paraMap9.put("product",productmap9);
+		paraMap9.put("quantity",item.get("quanity"));
+		paraMap9.put("List_price",item.get("prices"));
+		amount = item.get("quanity") * item.get("prices");
+		paraMap9.put("net_total",amount);
+		templist9.add(paraMap9);
+		tempMap9.put("Product_Details",templist9);
+	}
+	else if(month == 'June')
+	{
+		tempMap10 = Map();
+		tempMap10.put("Account_Name",d.get("Account_Name"));
+		tempMap10.put("parent_record",d);
+		sub = d.get("Subject");
+		mon = month;
+		subjectname = sub + " " + mon;
+		tempMap10.put("Subject",subjectname);
+		productmap10 = Map();
+		productmap10.put("name",item.get("Product").get("name"));
+		productmap10.put("id",item.get("Product").get("id"));
+		paraMap10 = Map();
+		paraMap10.put("product",productmap10);
+		paraMap10.put("quantity",item.get("quanity"));
+		paraMap10.put("List_price",item.get("prices"));
+		amount = item.get("quanity") * item.get("prices");
+		paraMap10.put("net_total",amount);
+		templist10.add(paraMap10);
+		tempMap10.put("Product_Details",templist10);
+	}
+	else if(month == 'July')
+	{
+		tempMap11 = Map();
+		tempMap11.put("Account_Name",d.get("Account_Name"));
+		tempMap11.put("parent_record",d);
+		sub = d.get("Subject");
+		mon = month;
+		subjectname = sub + " " + mon;
+		tempMap11.put("Subject",subjectname);
+		productmap11 = Map();
+		productmap11.put("name",item.get("Product").get("name"));
+		productmap11.put("id",item.get("Product").get("id"));
+		paraMap11 = Map();
+		paraMap11.put("product",productmap11);
+		paraMap11.put("quantity",item.get("quanity"));
+		paraMap11.put("List_price",item.get("prices"));
+		amount = item.get("quanity") * item.get("prices");
+		paraMap6.put("net_total",amount);
+		templist11.add(paraMap11);
+		tempMap11.put("Product_Details",templist11);
+	}
+	else if(month == 'August')
+	{
+		tempMap12 = Map();
+		tempMap12.put("Account_Name",d.get("Account_Name"));
+		tempMap12.put("parent_record",d);
+		sub = d.get("Subject");
+		mon = month;
+		subjectname = sub + " " + mon;
+		tempMap12.put("Subject",subjectname);
+		productmap12 = Map();
+		productmap12.put("name",item.get("Product").get("name"));
+		productmap12.put("id",item.get("Product").get("id"));
+		paraMap12 = Map();
+		paraMap12.put("product",productmap12);
+		paraMap12.put("quantity",item.get("quanity"));
+		paraMap12.put("List_price",item.get("prices"));
+		amount = item.get("quanity") * item.get("prices");
+		paraMap12.put("net_total",amount);
+		templist12.add(paraMap12);
+		tempMap12.put("Product_Details",templist12);
+	}
+	else
+	{
+		tempMap = Map();
+		tempMap.put("Account_Name",d.get("Account_Name"));
+		tempMap.put("parent_record",d);
+		sub = d.get("Subject");
+		mon = month;
+		subjectname = sub + " " + mon;
+		tempMap.put("Subject",subjectname);
+		productmap = Map();
+		productmap.put("name",item.get("Product").get("name"));
+		productmap.put("id",item.get("Product").get("id"));
+		paraMap = Map();
+		paraMap.put("product",productmap);
+		paraMap.put("quantity",item.get("quanity"));
+		paraMap.put("List_price",item.get("prices"));
+		amount = item.get("quanity") * item.get("prices");
+		paraMap.put("net_total",amount);
+		templist.add(paraMap2);
+		tempMap.put("Product_Details",templist);
+	}
+}
+resp1 = zoho.crm.createRecord("Invoices",tempMap);
+resp2 = zoho.crm.createRecord("Invoices",tempMap1);
+resp3 = zoho.crm.createRecord("Invoices",tempMap2);
+resp4 = zoho.crm.createRecord("Invoices",tempMap3);
+resp5 = zoho.crm.createRecord("Invoices",tempMap4);
+resp = zoho.crm.createRecord("Invoices",tempMap5);
+resp = zoho.crm.createRecord("Invoices",tempMap6);
+resp = zoho.crm.createRecord("Invoices",tempMap7);
+resp = zoho.crm.createRecord("Invoices",tempMap8);
+resp = zoho.crm.createRecord("Invoices",tempMap9);
+resp = zoho.crm.createRecord("Invoices",tempMap10);
+resp = zoho.crm.createRecord("Invoices",tempMap11);
+resp = zoho.crm.createRecord("Invoices",tempMap12);
