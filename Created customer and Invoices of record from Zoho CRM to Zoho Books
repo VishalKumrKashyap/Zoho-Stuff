@@ -1,0 +1,55 @@
+d = 85431000013083134;
+orgid = 60002748709;
+data = zoho.crm.getRecordById("Invoices",d);
+//info data;
+name = data.get("Subject");
+acc = data.get("Account_Name").get("name");
+//info acc;
+ productlist = list();
+
+
+// createdRecord = zoho.books.createRecord("contacts",60002748709,contactMap,"sambooks");
+// info createdRecord;
+
+ contactMap=map();
+ contactMap.put("contact_name",name);
+ contactMap.put("company_name",acc);
+ contactMap.put("first_name",acc);
+ contactMap.put("last_name","name");
+ contactMap.put("contact_type","customer");
+ contactMap.put("pan_no","ABCDE1234F");
+ contactMap.put("email",ifNull(data.get("email"),""));
+ contactMap.put("phone","9898989808");
+
+ response=zoho.books.createRecord("contacts", 60002748709, contactMap, "sambooks");
+ info response;
+ con_id =  response.get("contact").get("contact_id");
+ conType = response.get("contact").get("contact_type");
+
+temp1 = Map();
+ product_details = data.get("Product_Details");
+for each  ele in product_details
+{
+//	info ele;
+	product = ele.getJSON("product");
+	pdrname = ele.get("name");
+	pdrid = ele.getJSON("id");
+	quantity = ele.getJSON("quantity");
+	list_price = ele.getJSON("list_price");
+	amount = quantity * list_price;
+	temp1.put("name",pdrname);
+	temp1.put("quantity",quantity);
+	temp1.put("rate",list_price);
+	temp1.put("item_total",amount);
+	temp1.put("sub_total",amount);
+	temp1.put("description", "skdfjhg");
+  	temp1.put("rate", list_price);
+}
+productlist.add(temp1);
+ bookrecord = Map();
+ bookrecord.put("line_items",productlist);
+ bookrecord.put("customer_id",con_id);
+
+//info bookrecord;
+ respond = zoho.books.createRecord("Invoices",orgid,bookrecord,"sambooks");
+ info respond;
