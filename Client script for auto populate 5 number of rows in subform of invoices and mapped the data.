@@ -1,0 +1,65 @@
+var rec = ZDK.Page.getForm().getValues();
+console.log("___________");
+rec.Invoice_Item;
+console.log(rec);
+// var c = rec.Invoiced_Items;
+
+var product = ZDK.Apps.CRM.Products.fetch(1, 5);
+// console.log(product);
+// var productid = product[0].id;
+// console.log(productid);
+//const id = [];
+
+var product = ZDK.Apps.CRM.Invoices.fetch(1, 1);
+console.log(product);
+var productD  = product[0]._Product_Details
+console.log(productD[0]._product_Lookup_Id);
+var dd = productD[0]._product_Lookup_Id;
+
+console.log("____________+++++++++++++++");
+
+
+// var p = ZDK.Page.getField("Invoices");
+
+// var t = p[0]._Product_Details;
+// console.log(t);
+// var tt = t[0]._product_Lookup_Id;
+
+
+var v = ZDK.Apps.CRM.Products.fetchById(dd);
+console.log("product ", v);
+
+//console.log("prod_details ", prod_details);
+// var pname = v.Product_Name;
+// var pid = v.id;
+// console.log(pname);
+// console.log(pid);
+
+
+const lineItem = 
+    
+        
+    {
+        "_product_Lookup_Id": "85431000006697027",
+        "_keyModified": {},
+        "_$line_tax": null,
+        "_product": null,
+        "_quantity": 2,
+        "_Discount": 0,
+        "_total_after_discount": 200,
+        "_net_total": 224,
+        "_book": null,
+        "_Tax": 24,
+        "_list_price": 100,
+        "_unit_price": 100,
+        "_quantity_in_stock": -22,
+        "_total": 200,
+        "_product_description": ""
+    }
+
+    
+
+const lineitm = [];
+lineitm.push(lineItem);
+var inv = ZDK.Page.getField("Product_Detail").setValue(lineitm);
+console.log(inv);
