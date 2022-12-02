@@ -1,0 +1,38 @@
+data = zoho.crm.getRecordById("Leads",leadId);
+// info data ;
+name = data.get("Full_Name");
+// info name;
+Email = data.get("Email");
+// info Email;
+phone = data.get("Phone");
+// info phone;
+Company = data.get("Company");
+// info Company;
+Creator_ID = data.get("Creator_ID1");
+info "Creator_ID-----------";
+info Creator_ID;
+fmap = Map();
+smap = Map();
+fmap.put("Name",name);
+fmap.put("Email",Email);
+fmap.put("Company",Company);
+fmap.put("Phone_Number",phone);
+// info fmap;
+// searchRecord = zoho.crm.searchRecords("leads","(ID:equals:" + leadId + ")");
+if(Creator_ID == null)
+{
+	res = zoho.creator.createRecord("zoho_jay18","lead-form","Lead_Form",fmap,smap,"insertdatacrmtocreator");
+	info res;
+	creatorID = res.get("data").get("ID");
+	// 	info "creatorID" + creatorID;
+	upatemap = Map();
+	upatemap.put("Creator_ID1",creatorID);
+	updateRecord = zoho.crm.updateRecord("Leads",leadId,upatemap);
+	info updateRecord;
+	// 	info Creator_ID;
+}
+else
+{
+	response = zoho.creator.updateRecord("zoho_jay18","lead-form","All_Leads",Creator_ID,fmap,smap,"insertdatacrmtocreator");
+	info "response=======" + response;
+}
