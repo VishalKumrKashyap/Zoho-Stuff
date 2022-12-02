@@ -1,0 +1,34 @@
+d = 85431000012722080;
+record = zoho.crm.getRecordById("Deals",d);
+// info record;
+email = record.get("Email");
+info email;
+dealname = record.get("Deal_Name");
+info dealname;
+// template = invokeUrl [
+// 	url: "https://zohoapis.in/writer/api/v2/templates/a7q5i616986bd41df483c823a18330d7e8850"
+// 	type: GET
+//  	connection: "attachmentdownload"
+// ];
+var = zoho.writer.getMergeFields("a7q5i07060c28988e4b13aed423b590e6383e","attachmentdownload");
+info var;
+
+//info template;
+mergeMap = Map();
+mergeMap.put("Deals_Name",dealname);
+mergeMap.put("Email",email);
+data = {"data":{mergeMap}};
+// info data;
+merge_values = Map();
+merge_values.put("merge_data",data);
+// info merge_values;
+res = zoho.writer.mergeAndDownload("a7q5i07060c28988e4b13aed423b590e6383e","pdf",merge_values,"mailmergetest");
+info res;
+sendmail
+[
+	from :zoho.loginuserid
+	to :"vishal.kas@crm-masters.com"
+	subject :"Mail merge test"
+	message :"Happy Birthday "
+	Attachments :file:res
+]
