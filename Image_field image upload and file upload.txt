@@ -1,0 +1,145 @@
+lead = zoho.crm.getRecordById("Leads",id);
+//  info lead_info+"Lead";
+lead = invokeurl
+[
+    url :"https://www.zohoapis.eu/crm/v6/Leads/" + id
+    type :GET
+    connection:"photo"
+];
+//   info lead;
+data = lead.get("data");
+info data;
+Copy_of_Lease_Agreement = data.getJSON("Copy_of_Lease_Agreement");
+//info Copy_of_Lease_Agreement;
+File_Name__Copy_of_Lease_Agreement_id = Copy_of_Lease_Agreement.getJson("File_Id__s");
+info File_Name__Copy_of_Lease_Agreement_id;
+kiran = invokeurl
+[
+    url :"https://www.zohoapis.eu/crm/v6/files?id=" + File_Name__Copy_of_Lease_Agreement_id
+    type :GET
+    connection:"photo"
+];
+info "_______________________" + kiran;
+kiran.setParamName("file");
+response = invokeurl
+[
+    url :"https://www.zohoapis.eu/crm/v6/files"
+    type :POST
+    files:kiran
+    connection:"photo"
+];
+info response;
+fileid = response.getJSON("data").get(0).getJSON("details").getJSON("id");
+info fileid + "___________________field Id";
+fmp = Map();
+fmp.put("File_Id__s",fileid);
+filelist = List();
+filelist.add(fmp);
+info filelist;
+response = invokeurl
+[
+    url :"https://www.zohoapis.eu/crm/v6/Deals/652917000000650146/photo"
+    type :POST
+    files:kiran
+    connection:"photo"
+];
+info response;
+dealmap = Map();
+dealmap.put("Copy_of_Lease_Agreement",filelist);
+dlist =  List();
+dlist.add(dealmap);
+dmp  = map();
+dmp.put("data",dlist);
+update = invokeurl
+[
+url: "https://www.zohoapis.com/crm/v6/Deals/" + 652917000000650146
+type: PUT
+parameters: dmp + ""
+connection: "photo"
+];
+info "update : " + update;
+//info zoho.crm.updateRecord("Deals",652917000000650146,dealmap);
+// deal = zoho.crm.getRecordById("Deals",652917000000640159);
+//  info lead_info+"Lead";
+// deal = invokeurl
+// [
+//     url :"https://www.zohoapis.eu/crm/v6/Deals/" + 652917000000640159
+//     type :GET
+//     connection:"photo"
+// ];
+//   info deal;
+//   data=deal.getJson("data");
+//   Site_photos=data.getJson("Site_photos");
+//   info Site_photos
+//   Above Code for the  file Upload
+// data = lead.getJSON("data");
+// Lease_Agreement_Documents =  data.getJSON("Lease_Agreement_Document");
+// Copy_of_Any_Lease_Annexes =  data.getJSON("Copy_of_Any_Lease_Annexes");
+// // for lease documents
+// image_list=List();
+// fileIDList = list();
+// filelist = List();
+// for each Lease_Agreement_Document in Lease_Agreement_Documents
+// {
+// File_Id__s = Lease_Agreement_Document.getJSON("File_Id__s");
+// info File_Id__s;
+// image_list.add(File_Id__s);
+// vish = invokeurl
+// [
+//     url: "https://www.zohoapis.eu/crm/v2/files?id="+File_Id__s
+//     type: GET
+//     connection:"photo"
+// ];
+// info "_______________________"+vish;
+// vish.setParamName("file");
+// response = invokeurl
+// [
+//     url :"https://www.zohoapis.eu/crm/v2/files"
+//     type : POST
+//     files: vish
+//     connection:"photo"
+// ];
+// info response;
+// fileid = response.getJSON("data").get(0).getJSON("details").getJSON("id");
+// info fileid;
+//     fmp = Map();
+//     fmp.put("file_id",fileid);
+//     filelist.add(fmp);
+// }
+// info filelist;
+// //for annexx documents
+// image_list1=List();
+// fileIDList1 = list();
+// filelist1 = List();
+// for each Copy_of_Any_Lease_Annexess in Copy_of_Any_Lease_Annexes
+// {
+// File_Id__s1 = Copy_of_Any_Lease_Annexess.getJSON("File_Id__s");
+// info File_Id__s1;
+// image_list1.add(File_Id__s1);
+// vish1 = invokeurl
+// [
+//     url: "https://www.zohoapis.eu/crm/v2/files?id="+File_Id__s1
+//     type: GET
+//     connection:"photo"
+// ];
+// info "_______________________"+vish1;
+// vish1.setParamName("file");
+// response1 = invokeurl
+// [
+//     url :"https://www.zohoapis.eu/crm/v2/files"
+//     type : POST
+//     files: vish1
+//     connection:"photo"
+// ];
+// info response1;
+// fileid1 = response1.getJSON("data").get(0).getJSON("details").getJSON("id");
+// info fileid1;
+//     fmp1 = Map();
+//     fmp1.put("file_id",fileid1);
+//     filelist1.add(fmp1);
+// }
+// info filelist1;
+// dealmap = map();
+// dealmap.put("Lease_Agreement_Document",filelist);
+// dealmap.put("Copy_of_Any_Lease_Annexes",filelist1);
+//     info zoho.crm.updateRecord("Deals", 652917000000706042, dealmap);
