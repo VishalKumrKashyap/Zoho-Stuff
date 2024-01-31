@@ -1,0 +1,85 @@
+
+/*
+This is a sample function. Uncomment to execute or make changes to this function.
+*/
+salesorderID = salesorder.get("salesorder_id");
+salesorderdate = salesorder.get("date").toDate();
+organizationID = organization.get("organization_id");
+info organizationID;
+info salesorderID;
+salesOrderRecord = zoho.inventory.getRecordsByID("salesorders",organizationID,salesorderID,"zohoinventoryconn");
+info salesOrderRecord;
+salesorderdata = salesOrderRecord.get("salesorder");
+line_items = salesorderdata.get("line_items");
+mp = Map();
+mp.put("organization_id",organizationID);
+result = invokeurl
+[
+	url :"https://inventory.zoho.com/api/v1/invoices/fromsalesorder?salesorder_id=" + salesorderID
+	type :POST
+	parameters:mp
+	connection:"zohoinventoryconn"
+];
+// info "******" + result;
+get_invoice = result.getjson("invoice");
+invoice_id = get_invoice.get("invoice_id");
+invoice_number = get_invoice.get("invoice_number");
+invoice_date = get_invoice.get("date");
+customer_id = get_invoice.get("customer_id");
+total = get_invoice.get("total");
+invoice_map = Map();
+invoice_map.put("customer_id",customer_id);
+invoice_map.put("payment_mode","Cash");
+invoice_map.put("amount",total);
+invoice_map.put("reference_number",invoice_number);
+invoicelist = List();
+paymentmap = Map();
+paymentmap.put("invoice_id",invoice_id);
+paymentmap.put("amount_applied",total);
+invoicelist.add(paymentmap);
+invoice_map.put("invoices",invoicelist);
+create_payment_received = zoho.inventory.createRecord("customerpayments",organizationID,invoice_map,"zohoinventoryconn");
+info "create_payment_received" + create_payment_received;
+packageMap = Map();
+// packageMap.put("package_number","PA-00004");
+packageMap.put("date",invoice_date);
+lineItemList = List();
+info "______" + line_items;
+for each  item in line_items
+{
+	itemId = item.getJson("line_item_id");
+	lineItemMap = Map();
+	lineItemMap.put("so_line_item_id",itemId);
+	lineItemMap.put("quantity",item.get("quantity"));
+	lineItemList.add(lineItemMap);
+}
+packageMap.put("line_items",lineItemList);
+newPackage = invokeurl
+[
+	url :"https://inventory.zoho.com/api/v1/packages?salesorder_id=" + salesorderID + "&organization_id=" + organizationID
+	type :POST
+	parameters:packageMap.toString()
+	connection:"zohoinventoryconn"
+];
+info newPackage;
+pack = newPackage.get("package");
+packid = pack.get("package_id");
+packageDate = pack.get("date");
+ship = Map();
+ship.put("date",packageDate);
+ship.put("delivery_method","The Delivery method");
+create_shipment = invokeurl
+[
+	url :"https://inventory.zoho.com/api/v1/shipmentorders?package_ids=" + packid + "&salesorder_id=" + salesorderID + "&organization_id=" + organizationID
+	type :POST
+	parameters:ship.toString()
+	connection:"zohoinventoryconn"
+];
+info "create_shipment" + create_shipment;
+// response = invokeUrl
+// [
+// url: "https://www.zohoapis.com/inventory/v1/shipmentorders/?organization_id="+organizationID
+// type: GET
+// connection: "zohoinventoryconn"
+// ];
+// info response;
