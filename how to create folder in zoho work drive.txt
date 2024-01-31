@@ -1,0 +1,24 @@
+// account_id = 5925656000000474001;
+get_distributor = zoho.crm.getRecordById("Accounts",account_id);
+//info get_distributor;
+dname = get_distributor.get("Account_Name");
+account_Name = get_distributor.get("Account_Name");
+folder_name = "Distributor_" + dname;
+info folder_name;
+//create_folder = zoho.workdrive.createFolder(folder_name,"4wr2068da29561e3c46f1b3310daa3ccdea34","crmtoworkdrive");
+//folder creating t1qr7794d6ffccb114d28aa4f180b4635d9d9
+create_folder = zoho.workdrive.createFolder(folder_name,"t1qr7794d6ffccb114d28aa4f180b4635d9d9","crmtoworkdrive");
+folder_id = create_folder.get("data").get("id");
+info "folder id____" + folder_id;
+//folder_link = "https://one.zoho.com/zohoone/abbacigroup/home/cxapp/workdrive/home/3v5my69b2dc2219584918bf7f292acde92053/privatespace/folders/" + folder_id + "?frameorigin=https%3A%2F%2Fone.zoho.com";
+folder_link = "https://one.zoho.com/zohoone/abbacigroup/home/cxapp/workdrive/home/3v5my69b2dc2219584918bf7f292acde92053/teams/3v5my69b2dc2219584918bf7f292acde92053/ws/2ej3wf2251e68d81a481e91c4ade4960503d1/folders/" + folder_id + "?frameorigin=https%3A%2F%2Fone.zoho.com";
+update_map = Map();
+update_map.put("Workdrive_Folder_ID",folder_id);
+update_map.put("Workdrive_links",folder_link);
+info "______" + update_map;
+update_account = zoho.crm.updateRecord("Accounts",account_id,update_map);
+info update_account;
+create_folder_training = zoho.workdrive.createFolder("Training Module",folder_id,"crmtoworkdrive");
+info create_folder_training;
+create_folder_Marketing = zoho.workdrive.createFolder("Marketing Material",folder_id,"crmtoworkdrive");
+info create_folder_Marketing;
