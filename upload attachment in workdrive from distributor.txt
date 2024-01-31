@@ -1,0 +1,48 @@
+account_info = zoho.crm.getRecordById("Accounts",id);
+// info account_info ;
+Workdrive_Folder_ID = account_info.get("Workdrive_Folder_ID");
+upload_attachment = account_info.get("Upload_Attachment");
+if(Workdrive_Folder_ID != null)
+{
+	info "hi";
+	// 	related_attachment = zoho.crm.getRelatedRecords("Attachments","Accounts",id);
+	// 	if(related_attachment.size() > 0)
+	// 	{
+	// 		for each  attchment in related_attachment
+	// 		{
+	// 			attid = attchment.get("id");
+	// 			file = invokeurl
+	// 			[
+	// 				url :"https://www.zohoapis.com/crm/v5/Accounts/" + id + "/Attachments/" + attid
+	// 				type :GET
+	// 				connection:"crmtoworkdrive"
+	// 			];
+	// 			info file;
+	// 			upload_file = zoho.workdrive.uploadFile(file,Workdrive_Folder_ID,"Filename",true,"crmtoworkdrive");
+	// 			info upload_file;
+	// 		}
+	// 	}
+	related_attachment = zoho.crm.getRelatedRecords("Attachments","Accounts",id,1,200,{"sort_by":"Created_Time","sort_order":"desc"});
+	attid = related_attachment.get(0).get("id");
+	File_Name = related_attachment.get(0).get("File_Name");
+	file = invokeurl
+	[
+		url :"https://www.zohoapis.com/crm/v5/Accounts/" + id + "/Attachments/" + attid
+		type :GET
+		connection:"crmtoworkdrive"
+	];
+	info file;
+	upload_file = zoho.workdrive.uploadFile(file,Workdrive_Folder_ID,File_Name,false,"crmtoworkdrive");
+	// 	info upload_file;
+	// 	upload_file1 = zoho.workdrive.uploadFile(file,"2ej3wd58af58066724aa2a0c59908a95922c1",File_Name,false,"crmtoworkdrive");
+	// 	info upload_file1;
+	// 	upload_file2 = zoho.workdrive.uploadFile(file,"2ej3w59ca1569cab84ffd82d93575f1679fd0",File_Name,false,"crmtoworkdrive");
+	// 	info upload_file2;
+	upload_file3 = zoho.workdrive.uploadFile(file,"2ej3w4dcbd4a246744996927d70704264a606",File_Name,false,"crmtoworkdrive");
+	info "--" + upload_file3;
+	upload_file4 = zoho.workdrive.uploadFile(file,"2mh3xc0607de5320e435f9e21da5205cf7f4e",File_Name,false,"crmtoworkdrive");
+	info "--" + upload_file4;
+	update_map = Map();
+	update_map.put("Upload_Attachment",false);
+	update_rec = zoho.crm.updateRecord("Accounts",id,update_map);
+}
