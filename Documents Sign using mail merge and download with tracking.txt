@@ -1,0 +1,104 @@
+// id = 5925656000004003001;
+data = zoho.crm.getRecordById("Deals",id);
+info data;
+dealName = data.get("Deal_Name");
+dealName = data.get("Deal_Name");
+effective_date = data.get("Effective_Date");
+Party_A_Name = data.get("Party_A_Name2");
+Party_B_Name = data.get("Party_B_Name");
+ABH_NDA_Number = data.get("ABH_NDA_Number");
+Governing_Law = data.get("Governing_Law");
+Party_A_Address = data.get("Party_A_Address");
+Party_B_Address = data.get("Party_B_Address");
+Party_A_Jurisdiction = data.get("Party_A_Jurisdiction");
+Party_B_Jurisdiction = data.get("Party_B_Jurisdiction");
+Disclosure_Day = data.get("Disclosure_Day2");
+NDA_Discloser = data.get("Disclosure");
+//Governing_Law_State = data.get("Governing_Law_State");
+Billing_Country = data.get("Billiing_Country");
+Territory = data.get("Prospective_Distributor_Territory");
+Term_Period = data.get("Term_Period");
+Non_Solicitation_Period_Term = data.get("Non_Solicitation_Period_Term");
+Specific_Obligations = data.get("Specific_Obligations");
+Effective_Period = data.get("Effective_Period");
+Purpose = data.get("Purpose");
+Termination_Notice_Period = data.get("Termination_Notice_Period");
+Prospective_Distribution_Region = data.get("Prospective_Distribution_Region");
+accountid = data.get("Account_Name").getJSON("id");
+contact = data.get("Contact_Name").getJSON("id");
+contactRec = zoho.crm.getRecordById("Contacts",contact);
+email = contactRec.get("Email");
+info email;
+info accountid;
+// template = invokeurl
+// [
+// 	url :"https://zohoapis.com/writer/api/v1/templates/t2apj1c0dec859f584d2db5626743ad497625"
+// 	type :GET
+// 	connection:"zohocontract"
+// ];
+// info template;
+var = zoho.writer.getMergeFields("t2apj1c0dec859f584d2db5626743ad497625","zohocontract");
+info var;
+templateMap = Map();
+templateMap.put("Deal_Name",dealName);
+templateMap.put("Account_Name.Agreement_Start_Date",zoho.currentdate);
+//templateMap.put("id",85431000019641003);
+templateMap.put("Effective_Date",effective_date);
+// templateMap.put("Party_A_Name",Party_A_Name);
+templateMap.put("Purpose",Purpose);
+templateMap.put("Party_A_Name2",Party_A_Name);
+templateMap.put("Party_B_Name",Party_B_Name);
+templateMap.put("Party_A_Jurisdiction",Party_A_Jurisdiction);
+templateMap.put("Party_B_Jurisdiction",Party_B_Jurisdiction);
+templateMap.put("Party_A_Address",Party_A_Address);
+templateMap.put("Party_B_Address",Party_B_Address);
+templateMap.put("Disclosure_Day2",Disclosure_Day);
+templateMap.put("NDA_Discloser",dealName);
+templateMap.put("Governing_Law_State",Governing_Law);
+templateMap.put("Governing_Law",Governing_Law);
+templateMap.put("Billiing_Country",Billing_Country);
+templateMap.put("Territory",Prospective_Distribution_Region);
+templateMap.put("ABH_NDA_Number",ABH_NDA_Number);
+templateMap.put("Effective_Period",Effective_Period);
+info templateMap;
+dmp = Map();
+dmp.put("data",templateMap);
+slist = List();
+smp = Map();
+smp.put("recipient_1",email);
+smp.put("action_type","sign");
+smp1 = Map();
+smp1.put("recipient_2","larry@abbaci.com.hk");
+smp1.put("action_type","approve");
+slist.add(smp);
+slist.add(smp1);
+data = Map();
+data.put("merge_data",dmp);
+data.put("service_name","zohosign");
+data.put("signer_data",slist);
+resp = invokeurl
+[
+	url :"https://writer.zoho.com/api/v1/documents/t2apj1c0dec859f584d2db5626743ad497625/merge/sign"
+	type :POST
+	parameters:data
+	connection:"zohocontract"
+];
+info "____" + resp;
+info resp.getJSON("records");
+downloadpdf = resp.getJSON("records").getJSON("sign_request_id");
+signStatus = resp.getJSON("records").getJSON("status");
+dealmap = Map();
+dealmap.put("Sign_Id",downloadpdf);
+dealmap.put("Sign_Status",signStatus);
+info dealmap;
+d = zoho.crm.updateRecord("Deals",id,dealmap);
+info d;
+downloadpdf = downloadpdf.toString();
+info downloadpdf;
+resp1 = invokeurl
+[
+	url :"https://sign.zoho.com/api/v1/requests/" + downloadpdf + "/pdf"
+	type :GET
+	connection:"zohocontract"
+];
+info resp1;
