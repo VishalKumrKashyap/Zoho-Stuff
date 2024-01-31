@@ -1,0 +1,757 @@
+//Fetching Lead Data
+data = zoho.crm.getRecordById("Leads",id);
+// 	info data;
+//info data;
+update = Map();
+update.put("Lead_Status","Review");
+info zoho.crm.updateRecord("Leads",id,update);
+layout = data.get("Layout").getJSON("name");
+fname = data.get("First_Name");
+lname = data.get("Last_Name");
+LeadName = fname + " " + lname;
+leadType = data.getJSON("Lead_Type");
+Lead_By_Referral = data.get("Lead_By_Referral");
+info "leadTyp---" + leadType;
+contact_person = data.get("Contact_Person");
+contact_person_designation = data.get("Contact_Person_Designation");
+company = data.get("Company");
+fullName = data.get("Full_Name");
+// 	info fullName;
+Regions = data.get("Regions");
+currency = data.get("Currency");
+email = data.get("Email");
+phone = data.get("Phone");
+mobile = data.get("Mobile");
+leadType = data.get("Lead_Type");
+Country = data.get("Country");
+City = data.get("City");
+street = data.get("Street");
+state = data.get("State");
+Zip_Code = data.get("Zip_Code");
+propsectivePartner = data.get("Prospective_Parnters");
+info "propsectivePartner" + propsectivePartner;
+ParrentTerritory = data.get("Territory").getJSON("name");
+info ParrentTerritory;
+//if territory is Exclusive Distributor 
+if(propsectivePartner == null || propsectivePartner.isEmpty() || propsectivePartner == "")
+{
+	territory = data.get("Territory");
+	territoryName = territory.get("name");
+	// 	info territoryName;
+	territory_id = territory.getJSON("id");
+	// 	info territory_id;
+	country = data.get("Country");
+	city = data.get("City");
+	//Fetching Product
+	productRec = zoho.crm.getRelatedRecords("Products","Leads",id);
+	//info productRec;
+	productRec = productRec.toMap();
+	productType = productRec.getJSON("Product_Type");
+	productId = productRec.getJSON("id");
+	// 	info productId;
+	info "_____________";
+	if(leadType == null || leadType == "Customer / Revenue Partner" || leadType == "Business Opportunities")
+	{
+		// Create Contact from Lead
+		info "Create Contact from Lead";
+		contactMap = Map();
+		//contactMap.put("First_Name",fname);
+		contactMap.put("Last_Name",LeadName);
+		contactMap.put("Email",email);
+		contactMap.put("Phone",phone);
+		contactMap.put("Mobile",mobile);
+		contactMap.put("Company",company);
+		contactMap.put("Lead_Types",ifNull(leadType,""));
+		contactMap.put("Lead_By_Referral",ifNull(Lead_By_Referral,""));
+		contactMap.put("Currency",currency);
+		contactMap.put("Contact_Person",contact_person);
+		contactMap.put("Contact_Person_Designation",contact_person_designation);
+		contactResp = zoho.crm.createRecord("Contacts",contactMap);
+		info "Contact Resp ____________" + contactResp;
+		contID = contactResp.get("id");
+		proUp = Map();
+		contactUpdateRelated = zoho.crm.updateRelatedRecord("Products",productId,"Contacts",contID,proUp);
+		//Create Accounts from Lead
+		accountMap = Map();
+		accountMap.put("Account_Name",ifnull(company,LeadName));
+		accountMap.put("Email",email);
+		accountMap.put("Phone",phone);
+		accountMap.put("Company",company);
+		accountMap.put("Currency",currency);
+		accountMap.put("Billing_State",state);
+		accountMap.put("Billing_Street",street);
+		accountMap.put("Billing_City",City);
+		accountMap.put("Billing_Country",Country);
+		accountMap.put("Billing_Code",Zip_Code);
+		accountMap.put("Contact_Person",contact_person);
+		accountMap.put("Accounts_Type","Customer");
+		accountMap.put("Contact_Person_Designation",contact_person_designation);
+		accountMap.put("Contact_Name",contID);
+		accountMap.put("Distribution_Region",Regions);
+		accountResp = zoho.crm.createRecord("Accounts",accountMap,{"trigger":{"workflow"}});
+		info "AccountResp ________" + accountResp;
+		accountID = accountResp.get("id");
+		updateContact = Map();
+		updateContact.put("Account_Name",accountID);
+		info zoho.crm.updateRecord("Contacts",contID,updateContact);
+		proUp = Map();
+		accountUpdateRelated = zoho.crm.updateRelatedRecord("Products",productId,"Accounts",accountID,proUp);
+		//Deal create from Leads
+		dealMap = Map();
+		dealMap.put("Deal_Name",fullName);
+		dealMap.put("Stage","Qualification");
+		dealMap.put("Closing_Date",zoho.currentdate);
+		dealMap.put("Company",company);
+		dealMap.put("Currency",currency);
+		dealMap.put("Contact_Person",contact_person);
+		dealMap.put("Billing_State",state);
+		dealMap.put("Billing_Street",street);
+		dealMap.put("Billing_City",City);
+		dealMap.put("Billiing_Country",Country);
+		dealMap.put("Billing_Code",Zip_Code);
+		dealMap.put("Contact_Person_Designation",contact_person_designation);
+		dealMap.put("Contact_Name",contID);
+		dealMap.put("Account_Name",accountID);
+		dealMap.put("Lead",id);
+		dealMap.put("Prospective_Distribution_Region",Regions);
+		dealResp = zoho.crm.createRecord("Deals",dealMap,{"trigger":{"workflow"}});
+		info "dealResp _________________" + dealResp;
+		dealID = dealResp.get("id");
+		proUp = Map();
+		dealUpdateRelated = zoho.crm.updateRelatedRecord("Products",productId,"Deals",dealID,proUp);
+	}
+	else
+	{
+		//Creating Accounts from Leads
+		info "Vendor";
+		accountMap = Map();
+		accountMap.put("Account_Name",ifnull(company,LeadName));
+		accountMap.put("Email",email);
+		accountMap.put("Phone",phone);
+		accountMap.put("Company",company);
+		accountMap.put("Currency",currency);
+		accountMap.put("Billing_State",state);
+		accountMap.put("Billing_Street",street);
+		accountMap.put("Billing_City",City);
+		accountMap.put("Billing_Country",Country);
+		accountMap.put("Billing_Code",Zip_Code);
+		accountMap.put("Contact_Person",contact_person);
+		accountMap.put("Accounts_Type","Vendor");
+		accountMap.put("Contact_Person_Designation",contact_person_designation);
+		accountMap.put("Contact_Name",contID);
+		accountMap.put("Distribution_Region",Regions);
+		info accountMap;
+		accountResp = zoho.crm.createRecord("Accounts",accountMap,{"trigger":{"workflow"}});
+		info "AccountResp ________" + accountResp;
+		accountID = accountResp.get("id");
+		proUp = Map();
+		accountUpdateRelated = zoho.crm.updateRelatedRecord("Products",productId,"Accounts",accountID,proUp);
+		info accountUpdateRelated;
+		//Deal create from Leads
+		dealMap = Map();
+		dealMap.put("Deal_Name",fullName);
+		dealMap.put("Stage","Qualification");
+		dealMap.put("Closing_Date",zoho.currentdate);
+		dealMap.put("Company",company);
+		dealMap.put("Currency",currency);
+		dealMap.put("Contact_Person",contact_person);
+		dealMap.put("Billing_State",state);
+		dealMap.put("Billing_Street",street);
+		dealMap.put("Billing_City",City);
+		dealMap.put("Billiing_Country",Country);
+		dealMap.put("Billing_Code",Zip_Code);
+		dealMap.put("Contact_Person_Designation",contact_person_designation);
+		dealMap.put("Contact_Name",contID);
+		dealMap.put("Account_Name",accountID);
+		dealMap.put("Lead",id);
+		dealMap.put("Prospective_Distribution_Region",Regions);
+		dealResp = zoho.crm.createRecord("Deals",dealMap,{"trigger":{"workflow"}});
+		info "dealResp _________________" + dealResp;
+		dealID = dealResp.get("id");
+		proUp = Map();
+		dealUpdateRelated = zoho.crm.updateRelatedRecord("Products",productId,"Deals",dealID,proUp);
+		info dealUpdateRelated;
+		// Create Vendor from Lead
+		vMap = Map();
+		vendorMap = Map();
+		vendorMap.put("Email",email);
+		vendorMap.put("Phone",phone);
+		vendorMap.put("Country",Country);
+		vendorMap.put("City",City);
+		vendorMap.put("State",state);
+		vendorMap.put("Street",street);
+		vendorMap.put("Vendor_Name",ifNull(contact_person,fullName));
+		vendorMap.put("Accounts",accountID);
+		vendorResp = zoho.crm.createRecord("Vendors",vendorMap);
+		info "vendorResp::::::::::::::::::::" + vendorResp;
+		vendorID = vendorResp.get("id");
+		info "vendorID::::::::::" + vendorID;
+		vendorUpdateRelated = zoho.crm.updateRelatedRecord("Products",productId,"Vendors",vendorID,vMap);
+		vMap.put("Products",productId);
+		vendorUpdateRelated = zoho.crm.updateRecord("Vendors",vendorID,vMap);
+		info "vendor update record " + vendorUpdateRelated;
+	}
+	TerritoryData = invokeurl
+	[
+		url :"https://www.zohoapis.com/crm/v5/settings/territories?filters={'field': {'api_name' : 'name'},'value': '" + territoryName + "' ,'comparator': 'equal'}"
+		type :GET
+		connection:"territoryassign"
+	];
+	info TerritoryData;
+	territoryList = TerritoryData.get("territories");
+	territoryList = territoryList.toMap();
+	territoryID = territoryList.get("id");
+	info territoryID;
+	// contactid = 5925656000002183155;
+	paramap = {"data":{{"Territories":{{"id":territoryID}}}}};
+	// Assign territory to Deal
+	response3 = invokeurl
+	[
+		url :"https://www.zohoapis.com/crm/v2.1/Deals/" + dealID + "/actions/assign_territories"
+		type :POST
+		parameters:paramap + ""
+		connection:"territoryassign"
+	];
+	info "______________________" + response3;
+	// Territory Assign to contact
+	response1 = invokeurl
+	[
+		url :"https://www.zohoapis.com/crm/v2.1/Contacts/" + contID + "/actions/assign_territories"
+		type :POST
+		parameters:paramap + ""
+		connection:"territoryassign"
+	];
+	info "______________________" + response1;
+	// Assign territory to account
+	response2 = invokeurl
+	[
+		url :"https://www.zohoapis.com/crm/v2.1/Accounts/" + accountID + "/actions/assign_territories"
+		type :POST
+		parameters:paramap + ""
+		connection:"territoryassign"
+	];
+	info "______________________" + response2;
+	productInfo = zoho.crm.getRecordById("Products",productId);
+	info productInfo;
+	mspr = productInfo.get("Unit_Prices");
+	relatedRecord = zoho.crm.getRelatedRecords("Price_Books","Products",productId);
+	relatedRecord = relatedRecord.toMap();
+	Pricing_Details = relatedRecord.get("Pricing_Details");
+	distributorform = list();
+	count = 1;
+	for each  i in Pricing_Details
+	{
+		dmap = Map();
+		tier = "Tier " + count;
+		from_range = i.get("from_range");
+		dmap.put("Unit_Price_JPY_1",mspr);
+		dmap.put("Tier",tier);
+		dmap.put("To_Quantity",i.get("to_range"));
+		dmap.put("From_Quantity",i.get("from_range"));
+		dmap.put("Tier_Discount",i.get("discount"));
+		distributorform.add(dmap);
+		count = count + 1;
+	}
+	Rewards_and_Rebates = productInfo.get("Reward_and_Rebate_P");
+	info Rewards_and_Rebates;
+	rebateList = list();
+	for each  j in Rewards_and_Rebates
+	{
+		subrowMap = Map();
+		subrowMap.put("Year",j.get("Year").toString());
+		subrowMap.put("Rebate_Value_JPY",j.get("MSRP_JPY").toDecimal());
+		subrowMap.put("Rebate_Unit",j.get("Rebate_Unit").toDecimal());
+		subrowMap.put("Quantity",j.get("Quantity").toString());
+		rebateList.add(subrowMap);
+	}
+	info rebateList;
+	//_________________________________________________________________________________________Ignore
+	dealMap = Map();
+	dealMap.put("Distributor_Price_List",distributorform);
+	dealMap.put("Deal_Reward_and_Rebate",rebateList);
+	dealmapResp = zoho.crm.updateRecord("Deals",dealID,dealMap);
+	info dealmapResp;
+	AccountMap = Map();
+	// 	AccountMap.put("Distributor_Price_Listss",distributorform);
+	AccountMap.put("Reward_and_Rebates",rebateList);
+	AccountResp = zoho.crm.updateRecord("Accounts",accountID,AccountMap,{"trigger":{"workflow"}});
+	info AccountResp;
+	territoryData = zoho.crm.getRecordById("Lead Territories",territoryID);
+	info "territoryData----------------------------------" + territoryData;
+}
+else
+{
+	for each  i in propsectivePartner
+	{
+		if(ParrentTerritory.containsIgnoreCase("Exclusive Distributors"))
+		{
+			customername = i.get("Customer");
+			productId = i.get("Product").get("id");
+			// 		Country_Specific = i.get("Country_Specific").getJSON("id");
+			// 						terr = i.get("Country_Specifics").getJSON("id");
+			// 						terrName = i.get("Country_Specifics").getJSON("name");
+			// 						info terrName;
+			subregion = i.get("Regions");
+			info subregion;
+			terrName = subregion + " Exclusive Distributors";
+			// 						info "test "+zoho.crm.searchRecords("Lead_Territories", "(Name:equals:" + subregion + " Exclusive Distributors)");
+			// 		Distribution_List_module = zoho.crm.getRecordById("Distribution_Lists",terr);
+			// 		info Distribution_List_module;
+			// 		Distributor_Territory = Distribution_List_module.get("Distributor_Territory").get("name");
+			// 		info Distributor_Territory;
+			contactMap = Map();
+			//contactMap.put("First_Name",fname);
+			contactMap.put("Last_Name",LeadName);
+			contactMap.put("Email",email);
+			contactMap.put("Phone",phone);
+			contactMap.put("Mobile",mobile);
+			contactMap.put("Company",company);
+			contactMap.put("Lead_Types",ifNull(leadType,""));
+			contactMap.put("Lead_By_Referral",ifNull(Lead_By_Referral,""));
+			contactMap.put("Currency",currency);
+			contactMap.put("Contact_Person",contact_person);
+			contactMap.put("Contact_Person_Designation",contact_person_designation);
+			contactResp = zoho.crm.createRecord("Contacts",contactMap);
+			info "Contact Resp ____________" + contactResp;
+			contID = contactResp.get("id");
+			proUp = Map();
+			contactUpdateRelated = zoho.crm.updateRelatedRecord("Products",productId,"Contacts",contID,proUp);
+			//Create Accounts from Lead
+			accountMap = Map();
+			accountMap.put("Account_Name",customername);
+			accountMap.put("Email",email);
+			accountMap.put("Phone",phone);
+			accountMap.put("Company",company);
+			accountMap.put("Currency","JPY");
+			accountMap.put("Billing_State",state);
+			accountMap.put("Billing_Street",street);
+			accountMap.put("Billing_City",City);
+			accountMap.put("Billing_Country",Country);
+			accountMap.put("Billing_Code",Zip_Code);
+			accountMap.put("Contact_Person",contact_person);
+			accountMap.put("Accounts_Type","Customer");
+			accountMap.put("Contact_Person_Designation",contact_person_designation);
+			accountMap.put("Contact_Name",contID);
+			accountMap.put("Distribution_Region",Regions);
+			accountResp = zoho.crm.createRecord("Accounts",accountMap,{"trigger":{"workflow"}});
+			info "AccountResp ________" + accountResp;
+			accountID = accountResp.get("id");
+			updateContact = Map();
+			updateContact.put("Account_Name",accountID);
+			info zoho.crm.updateRecord("Contacts",contID,updateContact);
+			proUp = Map();
+			accountUpdateRelated = zoho.crm.updateRelatedRecord("Products",productId,"Accounts",accountID,proUp);
+			//Deal create from Leads
+			dealMap = Map();
+			dealMap.put("Deal_Name",customername);
+			dealMap.put("Stage","Qualification");
+			dealMap.put("Closing_Date",zoho.currentdate);
+			dealMap.put("Company",company);
+			dealMap.put("Currency","JPY");
+			dealMap.put("Contact_Person",contact_person);
+			dealMap.put("Billing_State",state);
+			dealMap.put("Billing_Street",street);
+			dealMap.put("Billing_City",City);
+			dealMap.put("Billiing_Country",Country);
+			dealMap.put("Billing_Code",Zip_Code);
+			dealMap.put("Contact_Person_Designation",contact_person_designation);
+			dealMap.put("Contact_Name",contID);
+			dealMap.put("Account_Name",accountID);
+			dealMap.put("Lead",id);
+			dealMap.put("Prospective_Distribution_Region",Regions);
+			dealResp = zoho.crm.createRecord("Deals",dealMap,{"trigger":{"workflow"}});
+			info "dealResp _________________" + dealResp;
+			dealID = dealResp.get("id");
+			proUp = Map();
+			dealUpdateRelated = zoho.crm.updateRelatedRecord("Products",productId,"Deals",dealID,proUp);
+			// Create Vendor from Lead
+			vMap = Map();
+			vendorMap = Map();
+			vendorMap.put("Email",email);
+			vendorMap.put("Phone",phone);
+			vendorMap.put("Country",Country);
+			vendorMap.put("City",City);
+			vendorMap.put("Street",street);
+			vendorMap.put("State",state);
+			// 		vendorMap.put("Zip_Code",);
+			vendorMap.put("Vendor_Name",ifNull(contact_person,""));
+			vendorMap.put("Accounts",accountID);
+			vendorResp = zoho.crm.createRecord("Vendors",vendorMap);
+			info "vendorResp::::::::::::::::::::" + vendorResp;
+			vendorID = vendorResp.get("id");
+			info "vendorID::::::::::" + vendorID;
+			vendorUpdateRelated = zoho.crm.updateRelatedRecord("Products",productId,"Vendors",vendorID,vMap);
+			vMap.put("Products",productId);
+			vendorUpdateRelated = zoho.crm.updateRecord("Vendors",vendorID,vMap);
+			info "vendor update record " + vendorUpdateRelated;
+			TerritoryData = invokeurl
+			[
+				url :"https://www.zohoapis.com/crm/v5/settings/territories?filters={'field': {'api_name' : 'name'},'value': '" + terrName + "' ,'comparator': 'equal'}"
+				type :GET
+				connection:"territoryassign"
+			];
+			info TerritoryData;
+			territoryList = TerritoryData.get("territories");
+			info "territoryList---" + territoryList;
+			territoryList = territoryList.toMap();
+			territoryID = territoryList.get("id");
+			info territoryID;
+			// contactid = 5925656000002183155;
+			paramap = {"data":{{"Territories":{{"id":territoryID}}}}};
+			// Assign territory to Deal
+			response3 = invokeurl
+			[
+				url :"https://www.zohoapis.com/crm/v2.1/Deals/" + dealID + "/actions/assign_territories"
+				type :POST
+				parameters:paramap + ""
+				connection:"territoryassign"
+			];
+			info "______________________" + response3;
+			// Territory Assign to contact
+			response1 = invokeurl
+			[
+				url :"https://www.zohoapis.com/crm/v2.1/Contacts/" + contID + "/actions/assign_territories"
+				type :POST
+				parameters:paramap + ""
+				connection:"territoryassign"
+			];
+			info "______________________" + response1;
+			// Assign territory to account
+			response2 = invokeurl
+			[
+				url :"https://www.zohoapis.com/crm/v2.1/Accounts/" + accountID + "/actions/assign_territories"
+				type :POST
+				parameters:paramap + ""
+				connection:"territoryassign"
+			];
+			info "______________________" + response2;
+			leadterrData = zoho.crm.searchRecords("Lead_Territories","(Name:equals:" + terrName + ")");
+			if(!leadterrData.isEmpty() || leadterrData != null)
+			{
+				info "New Code________________if_______________________";
+				leadterrData = leadterrData.toMap();
+				cTerr = leadterrData.getJSON("id");
+				info cTerr;
+				customLeadTerritory = zoho.crm.getRecordById("Lead_Territories",cTerr);
+				Distributor_PriceList = customLeadTerritory.get("Distributor_PriceList");
+				// info Distributor_PriceList;
+				distributorform = list();
+				count = 1;
+				for each  i in Distributor_PriceList
+				{
+					To_Quantity = i.get("To_Quantity");
+					From_Quantity = i.get("From_Quantity");
+					Exclusive_Distributor_Price = i.get("Exclusive_Distributor_Price");
+					MSRP_JPY = i.get("MSRP_JPY");
+					Discount_COGS_Per_Unit = i.get("Discount_COGS_Per_Unit");
+					Tier_Discount = i.get("Tier_Discount");
+					tier = "Tier " + count;
+					dmap1 = Map();
+					dmap1.put("Tier",tier);
+					dmap1.put("To_Quantity",To_Quantity);
+					dmap1.put("From_Quantity",From_Quantity);
+					dmap1.put("Tier_Discount",Tier_Discount);
+					dmap1.put("Unit_Price_JPY_1",MSRP_JPY);
+					distributorform.add(dmap1);
+					count = count + 1;
+				}
+				info "**********" + distributorform;
+			}
+			else
+			{
+				info "new code else";
+				productInfo = zoho.crm.getRecordById("Products",productId);
+				info productInfo;
+				mspr = productInfo.get("Unit_Prices");
+				relatedRecord = zoho.crm.getRelatedRecords("Price_Books","Products",productId);
+				relatedRecord = relatedRecord.toMap();
+				Pricing_Details = relatedRecord.get("Pricing_Details");
+				distributorform = list();
+				count = 1;
+				for each  i in Pricing_Details
+				{
+					dmap = Map();
+					tier = "Tier " + count;
+					from_range = i.get("from_range");
+					dmap.put("Unit_Price_JPY_1",mspr);
+					dmap.put("Tier",tier);
+					dmap.put("To_Quantity",i.get("to_range"));
+					dmap.put("From_Quantity",i.get("from_range"));
+					dmap.put("Tier_Discount",i.get("discount"));
+					distributorform.add(dmap);
+					count = count + 1;
+				}
+				info distributorform;
+			}
+			productInfo = zoho.crm.getRecordById("Products",productId);
+			info productInfo;
+			// 			mspr = productInfo.get("Unit_Prices");
+			// 			relatedRecord = zoho.crm.getRelatedRecords("Price_Books","Products",productId);
+			// 			relatedRecord = relatedRecord.toMap();
+			// 			Pricing_Details = relatedRecord.get("Pricing_Details");
+			// 			distributorform = list();
+			// 			count = 1;
+			// 			for each  i in Pricing_Details
+			// 			{
+			// 				dmap = Map();
+			// 				tier = "Tier " + count;
+			// 				from_range = i.get("from_range");
+			// 				dmap.put("Unit_Price_JPY_1",mspr);
+			// 				dmap.put("Tier",tier);
+			// 				dmap.put("To_Quantity",i.get("to_range"));
+			// 				dmap.put("From_Quantity",i.get("from_range"));
+			// 				dmap.put("Tier_Discount",i.get("discount"));
+			// 				distributorform.add(dmap);
+			// 				count = count + 1;
+			// 			}
+			Rewards_and_Rebates = productInfo.get("Reward_and_Rebate_P");
+			info Rewards_and_Rebates;
+			rebateList = list();
+			for each  j in Rewards_and_Rebates
+			{
+				subrowMap = Map();
+				subrowMap.put("Year",j.get("Year").toString());
+				subrowMap.put("Rebate_Value_JPY",j.get("MSRP_JPY").toDecimal());
+				subrowMap.put("Rebate_Unit",j.get("Rebate_Unit").toDecimal());
+				subrowMap.put("Quantity",j.get("Quantity").toString());
+				rebateList.add(subrowMap);
+			}
+			info rebateList;
+			dealMap = Map();
+			dealMap.put("Distributor_Price_List",distributorform);
+			dealMap.put("Deal_Reward_and_Rebate",rebateList);
+			dealmapResp = zoho.crm.updateRecord("Deals",dealID,dealMap);
+			info dealmapResp;
+			AccountMap = Map();
+			// 		AccountMap.put("Distributor_Price_Listss",distributorform);
+			AccountMap.put("Reward_and_Rebates",rebateList);
+			AccountResp = zoho.crm.updateRecord("Accounts",accountID,AccountMap,{"trigger":{"workflow"}});
+			info AccountResp;
+		}
+		else if(ParrentTerritory.containsIgnoreCase("E-Commerce Store"))
+		{
+			info "E-commerce";
+		}
+		else if(ParrentTerritory.containsIgnoreCase("Cross Border China Trade"))
+		{
+			info "china border";
+			customername = i.get("Customer");
+			productId = i.get("Product").get("id");
+			subregion = i.get("Regions");
+			if(subregion == "China")
+			{
+				terrName = "Cross Boarder China EC SHOP";
+				contactMap = Map();
+				//contactMap.put("First_Name",fname);
+				contactMap.put("Last_Name",LeadName);
+				contactMap.put("Email",email);
+				contactMap.put("Phone",phone);
+				contactMap.put("Mobile",mobile);
+				contactMap.put("Company",company);
+				contactMap.put("Lead_Types",ifNull(leadType,""));
+				contactMap.put("Lead_By_Referral",ifNull(Lead_By_Referral,""));
+				contactMap.put("Currency",currency);
+				contactMap.put("Contact_Person",contact_person);
+				contactMap.put("Contact_Person_Designation",contact_person_designation);
+				contactResp = zoho.crm.createRecord("Contacts",contactMap);
+				info "Contact Resp ____________" + contactResp;
+				contID = contactResp.get("id");
+				proUp = Map();
+				contactUpdateRelated = zoho.crm.updateRelatedRecord("Products",productId,"Contacts",contID,proUp);
+				//Create Accounts from Lead
+				accountMap = Map();
+				accountMap.put("Account_Name",customername);
+				accountMap.put("Email",email);
+				accountMap.put("Phone",phone);
+				accountMap.put("Company",company);
+				accountMap.put("Currency","CNY");
+				accountMap.put("Billing_State",state);
+				accountMap.put("Billing_Street",street);
+				accountMap.put("Billing_City",City);
+				accountMap.put("Billing_Country",Country);
+				accountMap.put("Billing_Code",Zip_Code);
+				accountMap.put("Contact_Person",contact_person);
+				accountMap.put("Accounts_Type","Customer");
+				accountMap.put("Contact_Person_Designation",contact_person_designation);
+				accountMap.put("Contact_Name",contID);
+				accountMap.put("Distribution_Region",Regions);
+				accountResp = zoho.crm.createRecord("Accounts",accountMap,{"trigger":{"workflow"}});
+				info "AccountResp ________" + accountResp;
+				accountID = accountResp.get("id");
+				updateContact = Map();
+				updateContact.put("Account_Name",accountID);
+				info zoho.crm.updateRecord("Contacts",contID,updateContact);
+				proUp = Map();
+				accountUpdateRelated = zoho.crm.updateRelatedRecord("Products",productId,"Accounts",accountID,proUp);
+				//Deal create from Leads
+				dealMap = Map();
+				dealMap.put("Deal_Name",customername);
+				dealMap.put("Stage","Qualification");
+				dealMap.put("Closing_Date",zoho.currentdate);
+				dealMap.put("Company",company);
+				dealMap.put("Currency","CNY");
+				dealMap.put("Contact_Person",contact_person);
+				dealMap.put("Billing_State",state);
+				dealMap.put("Billing_Street",street);
+				dealMap.put("Billing_City",City);
+				dealMap.put("Billiing_Country",Country);
+				dealMap.put("Billing_Code",Zip_Code);
+				dealMap.put("Contact_Person_Designation",contact_person_designation);
+				dealMap.put("Contact_Name",contID);
+				dealMap.put("Account_Name",accountID);
+				dealMap.put("Lead",id);
+				dealMap.put("Prospective_Distribution_Region",Regions);
+				dealResp = zoho.crm.createRecord("Deals",dealMap,{"trigger":{"workflow"}});
+				info "dealResp _________________" + dealResp;
+				dealID = dealResp.get("id");
+				proUp = Map();
+				dealUpdateRelated = zoho.crm.updateRelatedRecord("Products",productId,"Deals",dealID,proUp);
+				// Create Vendor from Lead
+				vMap = Map();
+				vendorMap = Map();
+				vendorMap.put("Email",email);
+				vendorMap.put("Phone",phone);
+				vendorMap.put("Country",Country);
+				vendorMap.put("City",City);
+				vendorMap.put("Street",street);
+				vendorMap.put("State",state);
+				// 		vendorMap.put("Zip_Code",);
+				vendorMap.put("Vendor_Name",ifNull(contact_person,fullName));
+				vendorMap.put("Accounts",accountID);
+				vendorResp = zoho.crm.createRecord("Vendors",vendorMap);
+				info "vendorResp::::::::::::::::::::" + vendorResp;
+				vendorID = vendorResp.get("id");
+				info "vendorID::::::::::" + vendorID;
+				vendorUpdateRelated = zoho.crm.updateRelatedRecord("Products",productId,"Vendors",vendorID,vMap);
+				vMap.put("Products",productId);
+				vendorUpdateRelated = zoho.crm.updateRecord("Vendors",vendorID,vMap);
+				info "vendor update record " + vendorUpdateRelated;
+				TerritoryData = invokeurl
+				[
+					url :"https://www.zohoapis.com/crm/v5/settings/territories?filters={'field': {'api_name' : 'name'},'value': '" + terrName + "' ,'comparator': 'equal'}"
+					type :GET
+					connection:"territoryassign"
+				];
+				info TerritoryData;
+				territoryList = TerritoryData.get("territories");
+				info "territoryList---" + territoryList;
+				territoryList = territoryList.toMap();
+				territoryID = territoryList.get("id");
+				info territoryID;
+				// contactid = 5925656000002183155;
+				paramap = {"data":{{"Territories":{{"id":territoryID}}}}};
+				// Assign territory to Deal
+				response3 = invokeurl
+				[
+					url :"https://www.zohoapis.com/crm/v2.1/Deals/" + dealID + "/actions/assign_territories"
+					type :POST
+					parameters:paramap + ""
+					connection:"territoryassign"
+				];
+				info "______________________" + response3;
+				// Territory Assign to contact
+				response1 = invokeurl
+				[
+					url :"https://www.zohoapis.com/crm/v2.1/Contacts/" + contID + "/actions/assign_territories"
+					type :POST
+					parameters:paramap + ""
+					connection:"territoryassign"
+				];
+				info "______________________" + response1;
+				// Assign territory to account
+				response2 = invokeurl
+				[
+					url :"https://www.zohoapis.com/crm/v2.1/Accounts/" + accountID + "/actions/assign_territories"
+					type :POST
+					parameters:paramap + ""
+					connection:"territoryassign"
+				];
+				info "______________________" + response2;
+				leadterrData = zoho.crm.searchRecords("Lead_Territories","(Name:equals:" + terrName + ")");
+				if(!leadterrData.isEmpty() || leadterrData != null)
+				{
+					info "New Code________________if_______________________";
+					leadterrData = leadterrData.toMap();
+					cTerr = leadterrData.getJSON("id");
+					info cTerr;
+					customLeadTerritory = zoho.crm.getRecordById("Lead_Territories",cTerr);
+					Distributor_PriceList = customLeadTerritory.get("Distributor_PriceList");
+					// info Distributor_PriceList;
+					distributorform = list();
+					count = 1;
+					for each  i in Distributor_PriceList
+					{
+						To_Quantity = i.get("To_Quantity");
+						From_Quantity = i.get("From_Quantity");
+						Exclusive_Distributor_Price = i.get("Exclusive_Distributor_Price");
+						MSRP_JPY = i.get("MSRP_JPY");
+						Discount_COGS_Per_Unit = i.get("Discount_COGS_Per_Unit");
+						Tier_Discount = i.get("Tier_Discount");
+						tier = "Tier " + count;
+						dmap1 = Map();
+						dmap1.put("Tier",tier);
+						dmap1.put("To_Quantity",To_Quantity);
+						dmap1.put("From_Quantity",From_Quantity);
+						dmap1.put("Tier_Discount",Tier_Discount);
+						dmap1.put("Unit_Price_JPY_1",MSRP_JPY);
+						distributorform.add(dmap1);
+					}
+					info "**********" + distributorform;
+				}
+				else
+				{
+					info "new code else";
+					productInfo = zoho.crm.getRecordById("Products",productId);
+					info productInfo;
+					mspr = productInfo.get("Unit_Prices");
+					relatedRecord = zoho.crm.getRelatedRecords("Price_Books","Products",productId);
+					relatedRecord = relatedRecord.toMap();
+					Pricing_Details = relatedRecord.get("Pricing_Details");
+					distributorform = list();
+					count = 1;
+					for each  i in Pricing_Details
+					{
+						dmap = Map();
+						tier = "Tier " + count;
+						from_range = i.get("from_range");
+						dmap.put("Unit_Price_JPY_1",mspr);
+						dmap.put("Tier",tier);
+						dmap.put("To_Quantity",i.get("to_range"));
+						dmap.put("From_Quantity",i.get("from_range"));
+						dmap.put("Tier_Discount",i.get("discount"));
+						distributorform.add(dmap);
+						count = count + 1;
+					}
+				}
+				productInfo = zoho.crm.getRecordById("Products",productId);
+				info productInfo;
+				Rewards_and_Rebates = productInfo.get("Reward_and_Rebate_P");
+				info Rewards_and_Rebates;
+				rebateList = list();
+				for each  j in Rewards_and_Rebates
+				{
+					subrowMap = Map();
+					subrowMap.put("Year",j.get("Year").toString());
+					subrowMap.put("Rebate_Value_JPY",j.get("MSRP_JPY").toDecimal());
+					subrowMap.put("Rebate_Unit",j.get("Rebate_Unit").toDecimal());
+					subrowMap.put("Quantity",j.get("Quantity").toString());
+					rebateList.add(subrowMap);
+				}
+				info "rebateList";
+				info rebateList;
+				dealMap = Map();
+				dealMap.put("Distributor_Price_List",distributorform);
+				dealMap.put("Deal_Reward_and_Rebate1",rebateList);
+				dealmapResp = zoho.crm.updateRecord("Deals",dealID,dealMap);
+				info dealmapResp;
+				AccountMap = Map();
+				// 		AccountMap.put("Distributor_Price_Listss",distributorform);
+				AccountMap.put("Reward_and_Rebates",rebateList);
+				AccountResp = zoho.crm.updateRecord("Accounts",accountID,AccountMap,{"trigger":{"workflow"}});
+				info AccountResp;
+				territoryData = zoho.crm.getRecordById("Lead Territories",territoryID);
+				// 				info "territoryData----------------------------------" + territoryData;
+			}
+		}
+	}
+}
