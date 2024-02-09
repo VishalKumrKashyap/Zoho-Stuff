@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.8.10/themes/smoothness/jquery-ui.css" type="text/css" />
+    <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.js"></script>
+    <script src="https://live.zwidgets.com/js-sdk/1.0.5/ZohoEmbededAppSDK.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <style>
+      .required{
+        color: cornflowerblue;
+      }
+      .flex_div > .form-group {
+  flex: 50%;
+  width: 50%;
+    max-width: 49%;
+ }
+
+ .form-group {
+    margin-bottom: 3px !important;
+}
+
+label
+{
+  font-size: 13px;
+}
+    </style>
+    <div class="col-md-12">
+<form>
+      <div class="col-md-8">
+ 
+<div class="flex_div" style="display: flex; flex-wrap: wrap; gap: 10px;" >
+      <div class="form-group">
+        <label for="myDropdown">Reason  Site Was Lost</label>
+        <select id="myDropdown" class="form-control" >
+            <option value="">--Select--</option>
+            <optgroup label ="Potential to Reengage ">
+    
+            <option value="Owning parties not agreed on sale">Owning parties not agreed on sale</option>
+            <option value="Plot/building has mortgage - bank consent needed">Plot/building has mortgage - bank consent needed</option>
+            <option value="TASC do not have correct landlord contact details">TASC do not have correct landlord contact details</option>
+            <option value="Landlord not willing to accept 30 year usufruct">Landlord not willing to accept 30 year usufruct</option>
+            <option value="Landlord not responding, TASC have contact details">Landlord not responding, TASC have contact details</option>
+            <option value="Non-Cedendo clause in lease, landlord concerned">Non-Cedendo clause in lease, landlord concerned</option>
+            <option value="Landlord happy with ongoing rental income">Landlord happy with ongoing rental income</option>
+            <option value="Landlord has high tax burden upon selling">Landlord has high tax burden upon selling</option>
+            <option value="Conflict between TASC and landlord">Conflict between TASC and landlord</option>
+            <option value="Landlord demanding higher multiple">Landlord demanding higher multiple</option>
+           
+            <option value="Non-Cedendo clause in lease, lease expiry date far away">Non-Cedendo clause in lease, lease expiry date far away</option>
+            <option value="Rejected by TASC: Active lease has been prepaid">Rejected by TASC: Active lease has been prepaid</option>
+            <option value="Landlord has health issues">Landlord has health issues</option>
+            <option value="Rejected by TASC: Legal issues with plot">Rejected by TASC: Legal issues with plot</option>
+            <optgroup label ="Opportunity Lost Forever ">
+            <option value="Landlord received better offer from competition">Landlord received better offer from competition</option>
+            <option value="Lease has already been sold">Lease has already been sold</option>
+            <option value="Operator no longer at site, lease terminated">Operator no longer at site, lease terminated</option>
+            <option value="Landlord pulled out, TASC taken too much time to close">Landlord pulled out, TASC taken too much time to close</option>
+            <option value="Rejected by TASC: Site a consolidation risk">Rejected by TASC: Site a consolidation risk</option>
+            <option value="Rejected by TASC: DD not passed">Rejected by TASC: DD not passed</option>
+            <option value="Rejected by TASC: Site considerably overrented">Rejected by TASC: Site considerably overrented</option>
+            <option value="Rejected by TASC: Site owned by Public Institution">Rejected by TASC: Site owned by Public Institution</option>
+            <optgroup label ="Other reason not specified above">
+              <option value="Other reason not specified above">Other reason not specified above</option>
+            </optgroup>
+        </select>
+      </div>
+       
+      <div class="form-group Competitor hide">
+        <label for="">Competitor</label>
+        <select class="form-control" id="Competitor">
+          <option value ="">--Select--</option>
+          <option value ="Telefónica">Telefónica</option>
+          <option value="Vodafone">Vodafone</option>
+          <option value="MásMóvil">MásMóvil</option>
+          <option value="Iliad">Iliad</option>
+          <option value="Inwit">Inwit</option>
+          <option value="Radio Mugello">Radio Mugello</option>
+          <option value="VBE">VBE</option>
+          <option value="Radio Maria">Radio Maria</option>
+          <option value="SRT">SRT</option>
+          <option value="RDS">RDS</option>
+          <option value="Radio Monteiasi">Radio Monteiasi</option>
+          <option value="Monradio">Monradio</option>
+          <option value="Tecnicom">Tecnicom</option>
+          <option value="Genetiko">Genetiko</option>
+          <option value="Radio Italia">Radio Italia</option>
+          <option value="Radio Italia Puglia (TRM)">Radio Italia Puglia (TRM)</option>
+          <option value="Telestar Radio Italia Puglia">Telestar Radio Italia Puglia</option>
+          <option value="Radio Zeta">Radio Zeta</option>
+          <option value="Vigili Rufina">Vigili Rufina</option>
+          <option value="CAT Comune LA7">CAT Comune LA7</option>
+          <option value="Comando Carabinieri">Comando Carabinieri</option>
+          <option value="Ei Towers">Ei Towers</option>
+          <option value="Netco">Netco</option>
+          <option value="Rai">Rai</option>
+          <option value="Rai TV">Rai TV</option>
+          <option value="TRM TV">TRM TV</option>
+          <option value="Eolo">Eolo</option>
+          <option value="Momax">Momax</option>
+          <option value="Rete Ivo">Rete Ivo</option>
+          <option value="Arcolink">Arcolink</option>
+          <option value="PRO SRL">PRO SRL</option>
+          <option value="A.N.P.A.S..">A.N.P.A.S..</option>
+          <option value="Laboradio">Laboradio</option>
+          <option value="Towersud">Towersud</option>
+          <option value="GNETICO">GNETICO</option>
+          <option value="T-Mobile">T-Mobile</option>
+          <option value="Play">Play</option>
+          <option value="Plus">Plus</option>
+          <option value="Emitel">Emitel</option>
+          <option value="Polkomtel">Polkomtel</option>
+          <option value="OPL">OPL</option>
+          <option value="Agat">Agat</option>
+          <option value="Cosmote (OTE)">Cosmote (OTE)</option>
+          <option value="Vodafone Greece">Vodafone Greece</option>
+          <option value="Wind Hellas">Wind Hellas</option>
+          <option value="Forthnet (Nova)">Forthnet (Nova)</option>
+          <option value="Antenna TV">Antenna TV</option>
+          <option value="Alpha TV">Alpha TV</option>
+          <option value="Telekom Srbija">Telekom Srbija</option>
+          <option value="Telenor Serbia">Telenor Serbia</option>
+          <option value="A1 Serbia">A1 Serbia</option>
+          
+        </select>
+      </div>
+      <div class="form-group other hide">
+        <label for="exampleFormControlTextarea1">If Other, please give details of why Site was Lost</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+      </div>
+
+      <div class="form-group reengage">
+        <label for="exampleFormControlTextarea1">Is there a good time to reengage with Seller</label>
+        <input type="date" class="form-control" id="reengage">
+      </div>
+        
+      <div class="form-group comments">
+        <label for="exampleFormControlTextarea1">Site lost Comments</label>
+        <input type="text" class="form-control" id="comments">
+      </div>
+
+
+
+      <div class="form-group Annual-rent hide">
+        <label for="">Annual Rent</label>
+        <input type="number" placeholder="$" class="form-control ann_rent" id ="Annual_Rent">
+      </div>
+
+      
+      <div class="form-group Premiunoff hide">
+        <label for="">Premium Offered by Competitor</label>
+        <input type="number" class="form-control" id ="premium">
+      </div>
+
+
+      <!-- div class="form-group Net hide">
+        <label for="">Competitor Net Multiple</label>
+        <input type="text" readonly class="form-control" id ="Competitor_Net_Multiple">
+        <span class="required">Annual Rent / Premium Offered by Competitor</span>
+      </div> -->
+
+
+      <div class="form-group Gross hide">
+        <label for="">Competitor Gross Multiple</label>
+        <input type="text" readonly class="form-control" id ="Competitor_Gross_Multiple">
+        <span class="required">Annual Rent / Premium Offered by Competitor</span>
+      </div>
+
+      </div>
+    <button type="submit" id = "submit" class="btn btn-success">Submit</button>
+
+    </div>
+    </form> 
+    </div>
+    
+    <script>
+      // fields data type 
+      var  Reason_Site_Was_Lost  = "";
+      var Competitor="";
+      var Premium_Offered_by_Competitor=0;
+      var Competitor_Net_Multiple=0;
+      var Competitor_Gross_Multiple=0;
+      var Annual_Rent = "";
+      var Is_there_a_good_time_to_reengage_with_Seller ="";
+      var If_Other_please_give_details_="";
+      var Comments="";
+      var rec_id  = "";
+    
+      ZOHO.embeddedApp.on("PageLoad", function (data) {
+     console.log( "test   --"+JSON.stringify(data));
+      rec_id = data.EntityId[0];
+
+     ZOHO.CRM.API.getRecord({ Entity: "Deals", RecordID: rec_id }).then(function (firstcontact) {
+      console.log("delviery_adat--->"+JSON.stringify(firstcontact));
+                
+      Annual_Rent = firstcontact.data[0].Annual_Rent;
+      console.log("Annual_Rent==="+Annual_Rent);
+      Competitor_Gross_Multiple = firstcontact.data[0].Competitor_Gross_Multiple;
+      Comments= firstcontact.data[0].Comments;
+      Competitor_Net_Multiple = firstcontact.data[0].Competitor_Net_Multiple;
+      Premium_Offered_by_Competitor = firstcontact.data[0].Premium_Offered_by_Competitor;
+      Competitor = firstcontact.data[0].Competitor;
+      Reason_Site_Was_Lost =  firstcontact.data[0].Reason_Site_Was_Lost;
+      If_Other_please_give_details_of_why_Site_was_Lost=firstcontact.data[0].If_Other_please_give_details_of_why_Site_was_Lost;
+      Is_there_a_good_time_to_reengage_with_Seller=firstcontact.data[0].Is_there_a_good_time_to_reengage_with_Seller;
+      Country=firstcontact.data[0].Country;
+      console.log("Countries==="+Country);
+
+
+    
+      if(Reason_Site_Was_Lost == "Landlord received better offer from competition")
+              {                  
+                  $(".Competitor").removeClass("hide"); 
+                  $(".Premiunoff").removeClass("hide"); 
+                   $(".Net").removeClass("hide"); 
+                  $(".Gross").removeClass("hide");    
+                  $(".Annual-rent").removeClass("hide");                
+
+              }
+              else
+              {
+                $(".Competitor").addClass("hide"); 
+                $(".Premiunoff").addClass("hide");          
+                 $(".Net").addClass("hide"); 
+                $(".Gross").addClass("hide");
+                $(".Annual-rent").addClass("hide");                 
+
+
+              }
+
+              if(Reason_Site_Was_Lost == "Other reason not specified above")
+              {                  
+                  $(".other").removeClass("hide");                 
+              }
+              else
+              {
+                $(".other").addClass("hide");
+              }
+
+              var html = "";
+
+              if(Country == "Spain"){
+        
+                html += " <option value='InfraEspaña'>InfraEspaña</option>";
+                html += " <option value='TIP'>TIP</option>";
+                html += " <option value='AP Wireless'>AP Wireless</option>";
+                html += " <option value='Vodafone'>Vodafone</option>";
+                html += " <option value='Totem'>Totem</option>";
+                html += " <option value='ATC'>ATC</option>";
+                html += " <option value='Vantage'>Vantage</option>";
+
+                $("#Competitor").html(html);      
+              }
+              else if(Country == "Italy")
+              {
+                html += " <option value='InfraItalia'>InfraItalia</option>";
+                html += " <option value='TIP'>TIP</option>";
+                html += " <option value='AP Wireless'>AP Wireless</option>";
+                html += " <option value='Cellnex'>Cellnex</option>";
+                html += " <option value='Inwit'>Inwit</option>";
+      
+                $("#Competitor").html(html);  
+              }
+              else if(Country == "Poland")
+              {
+                html += " <option value='Brittania'>Brittania</option>";
+                html += " <option value='TIP'>TIP</option>";
+                html += " <option value='AP Wireless'>AP Wireless</option>";
+                html += " <option value='Cellnex'>Cellnex</option>";
+                html += " <option value='Orange'>Orange</option>";
+      
+                $("#Competitor").html(html);  
+              }
+              else if(Country == "Greece")
+              {
+                html += " <option value='Vodafone'>Vodafone</option>";
+                html += " <option value='Cosmote'>Cosmote</option>";
+                html += " <option value='AP Wireless'>AP Wireless</option>";
+      
+                $("#Competitor").html(html);  
+              }
+              else if(Country == "Serbia")
+              {
+                html += " <option value='A1 Towers'>A1 Towers</option>";
+                html += " <option value='Cetin'>Cetin</option>";
+                html += " <option value='Telecom Serbia'>Telecom Serbia</option>";
+      
+                $("#Competitor").html(html);  
+              }
+              else if(Country == "UK")
+              {
+                
+                html += " <option value='AP Wireless'>AP Wireless</option>";
+                html += " <option value='Cellnex'>Cellnex</option>";
+                html += " <option value='TIP'>TIP</option>";
+                html += " <option value='WIG'>WIG</option>";
+      
+                $("#Competitor").html(html);  
+              }
+
+      console.log("Reason_Site_Was_Lost--->" +  (Reason_Site_Was_Lost));
+      console.log("Annual_Rent below==="+Annual_Rent);
+
+
+
+        $("#myDropdown option[value='"+Reason_Site_Was_Lost+"']").attr("selected","selected");
+        $("#Competitor option[value='"+Competitor+"']").attr("selected","selected");
+        $("#exampleFormControlTextarea1").val(If_Other_please_give_details_of_why_Site_was_Lost);
+        $("#premium").val(Premium_Offered_by_Competitor);
+        $("#Competitor_Gross_Multiple").val(Competitor_Gross_Multiple);
+        $("#Competitor_Net_Multiple").val(Competitor_Net_Multiple);
+        $("#reengage").val(Is_there_a_good_time_to_reengage_with_Seller);
+      $("#Annual_Rent").val(Annual_Rent);
+      
+              
+
+  });
+  ZOHO.CRM.UI.Resize({ height: "395", width: "550" }).then(function (data) {
+          console.log(data);        
+        });
+  });
+  ZOHO.embeddedApp.init();
+
+
+      $(document).ready(function (){
+ 
+           $("#myDropdown").on("change",()=>{
+              // alert($("#myDropdown").val());
+              var reason = $("#myDropdown").val();
+              if(reason == "Other reason not specified above")
+              {                  
+                  $(".other").removeClass("hide");                 
+              }
+              else
+              {
+                $(".other").addClass("hide");
+              }
+
+              if(reason == "Landlord received better offer from competition")
+              {                  
+                  $(".Competitor").removeClass("hide"); 
+                  $(".Premiunoff").removeClass("hide"); 
+                  $(".Net").removeClass("hide"); 
+                  $(".Gross").removeClass("hide");    
+                  $(".Annual-rent").removeClass("hide");                
+
+
+              }
+              else
+              {
+                $(".Competitor").addClass("hide"); 
+                $(".Premiunoff").addClass("hide");          
+                $(".Net").addClass("hide"); 
+                $(".Gross").addClass("hide");
+                $(".Annual-rent").addClass("hide");                 
+
+
+              } 
+           });
+
+           $("#premium").on("keyup",()=>{
+            var pre_val = $("#premium").val();
+            var ann_ret = $("#Annual_Rent").val();
+
+            var total =   (pre_val / ann_ret).toFixed(2);
+            // alert(total);
+            $("#Competitor_Gross_Multiple").val(total);
+            $("#Competitor_Net_Multiple").val(total);
+           });
+
+
+           $("#submit").on("click",()=>{
+            // alert();
+            var reason_loss = $("#myDropdown").val();
+            var reengage = $("#reengage").val();
+            var Comments1=$("#comments").val();
+            var exampleFormControlTextarea112 = $("#reengage").val();
+            var Competitor12 = $("#Competitor").val();
+            var premium12 = $("#premium").val();
+            var Annual_Rent12 = $("#Annual_Rent").val();
+             
+            var params = {"Reason_Site_Was_Lost":reason_loss ,             
+            "Next_FollowUp_Date":reengage ,
+             "Other_reason_not_specified_above" :exampleFormControlTextarea112,
+             "Competitor" :Competitor12, 
+             "Competitor_Gross_Multiple" :Competitor_Gross_Multiple,
+             "Competitor_Net_Multiple" :Competitor_Net_Multiple,
+             "Premium_Offered_by_Competitor" :premium12,
+             "Annual_Rent" :Annual_Rent12,
+             "Comments":Comments1,
+              "id" : rec_id
+            };
+               
+             console.log("params---"+JSON.stringify(params));
+
+             var config={
+              Entity:"Deals",
+              APIData : params
+             }
+            
+             ZOHO.CRM.API.updateRecord(config)
+            .then(function(data){
+
+              
+                console.log("data update===="+data);
+            })
+
+            
+          ZOHO.CRM.UI.Popup.closeReload().then(function(data){
+          console.log(data)
+          })
+           });
+      });
+1
+      
+      // function toggleFields() {
+      // }
+  </script>
+  
+  
+  </body>
+</html>
