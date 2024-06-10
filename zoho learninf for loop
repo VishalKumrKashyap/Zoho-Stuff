@@ -1,0 +1,41 @@
+// length = 5;
+// count = 0;
+// 	 	for each  i in if(length < 0,list(),"".leftpad(length - 1).toList(""))
+// 	 	{ 
+			
+// 			info count;
+// 			count = count+1;
+// 		}
+
+count = 0;
+s1 = leftPad(" ",6).replaceAll(" " ,"0").toList("");
+// info s1;
+arr = [1,2,4,5,6];
+count = 0;
+sorting = list();
+for each s in s1
+{
+// 	info arr.get(count);
+	if ( count < arr.size() ) 
+    {
+		a = arr.get(count);
+		count1 = count+1;
+		b = arr.get(count1);
+		for each j in s1
+		{
+			if(a > b)
+			{
+				info "true";
+			}
+			else 
+			{
+			}	
+		}
+		
+    }
+	else 
+    {
+		break;
+    }
+	count = count+1;
+}
