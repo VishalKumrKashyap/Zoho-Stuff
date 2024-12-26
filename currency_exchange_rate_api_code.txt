@@ -1,0 +1,9 @@
+float api_callings.get_currency_rate(String currency_name)
+{
+	my_currency = Add_Company_Details[ID != 0].Currency;
+	api_response = getUrl("http://free.currencyconverterapi.com/api/v5/convert?q=" + my_currency + "_" + currency_name + "&compact=y").toMap();
+// 	info api_response;
+	currency_value = api_response.get(my_currency + "_" + currency_name);
+	currency_rate = currency_value.get("val").toDecimal();
+	return currency_rate;
+}

@@ -1,0 +1,6 @@
+for each  currency_det in Add_Currency[ID != 0]
+{
+	currency_rate = thisapp.api_callings.get_currency_rate(currency_det.Currency_Code);
+	currency_det.Date_field=zoho.currentdate;
+	currency_det.Today_Currency_Rate=currency_rate;
+}
